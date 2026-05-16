@@ -1,0 +1,38 @@
+{
+  "name": "@mentraos/capture-bundle-schemas",
+  "version": "1.0.0",
+  "description": "TypeScript types, JSON Schema loaders, and Capture Bundle directory validation utilities",
+  "type": "module",
+  "license": "Apache-2.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schemas/*": "./schemas/*"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "prepare:schemas": "node ../../tools/prepare-ts-package.mjs",
+    "prepublishOnly": "npm run prepare:schemas && npm run build"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.6"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

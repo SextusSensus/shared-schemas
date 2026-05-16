@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/metadata.schema.json",
+  "title": "Capture Bundle metadata.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "recorded_platform",
+    "app",
+    "sensors"
+  ],
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
+    "recorded_platform": {
+      "type": "string",
+      "enum": ["ios", "android", "glasses", "mixed"],
+      "description": "Primary recorder platform; mixed when phone + glasses contribute."
+    },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": { "$ref": "common.schema.json#/$defs/semver" },
+        "build": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["device_id", "role"],
+        "properties": {
+          "device_id": { "$ref": "common.schema.json#/$defs/uuid" },
+          "role": {
+            "type": "string",
+            "enum": [
+              "phone_primary",
+              "glasses_companion",
+              "unknown"
+            ]
+          },
+          "model": { "type": "string", "maxLength": 256 },
+          "os_version": { "type": "string", "maxLength": 128 }
+        }
+      }
+    },
+    "coordinate_conventions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "phone_ar_sdk": {
+          "type": "string",
+          "enum": ["arkit", "arcore", "none"]
+        },
+        "posemesh_domain_space": {
+          "type": "string",
+          "enum": ["right_handed_y_up", "unspecified"],
+          "description": "Posemesh-published poses are right-handed Y-up in domain space unless custom tooling documents otherwise."
+        },
+        "notes": { "type": "string", "maxLength": 8192 }
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rgb", "depth", "imu"],
+      "properties": {
+        "rgb": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "codec": { "type": "string", "maxLength": 64 },
+            "resolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["width_px", "height_px"],
+              "properties": {
+                "width_px": { "type": "integer", "minimum": 1 },
+                "height_px": { "type": "integer", "minimum": 1 }
+              }
+            },
+            "nominal_fps": { "type": "number", "exclusiveMinimum": 0 },
+            "clock_domain": {
+              "type": "string",
+              "enum": ["host_monotonic_ns", "sensor_unknown"],
+              "description": "Clock used for frame timestamps before sync.json mapping."
+            }
+          }
+        },
+        "depth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "lidar_dense",
+                "stereo",
+                "tof",
+                "arcore_raw",
+                "none",
+                "unknown"
+              ]
+            },
+            "units": {
+              "type": "string",
+              "enum": ["meters", "millimeters", "normalized", "unknown"]
+            }
+          }
+        },
+        "imu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "accel_unit": {
+              "type": "string",
+              "enum": ["m_s2", "g", "unknown"]
+            },
+            "gyro_unit": {
+              "type": "string",
+              "enum": ["rad_s", "deg_s", "unknown"]
+            }
+          }
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recording_start_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+        "recording_end_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" }
+      }
+    }
+  }
+}

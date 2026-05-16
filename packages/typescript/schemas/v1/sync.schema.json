@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/sync.schema.json",
+  "title": "Capture Bundle sync.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "utc_epoch_anchor"],
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
+    "utc_epoch_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "anchor_utc"],
+      "properties": {
+        "valid": {
+          "type": "boolean",
+          "description": "If true, anchor_utc was established from a trusted UTC source (e.g. NTP-synced wall clock) at recording start."
+        },
+        "anchor_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+        "anchor_monotonic_ns": {
+          "$ref": "common.schema.json#/$defs/timestamp_ns",
+          "description": "Optional monotonic time (same domain as pose host clock) at anchor instant."
+        }
+      }
+    },
+    "streams": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stream_id", "clock", "samples"],
+        "properties": {
+          "stream_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[a-z0-9_\\-\\.]+$",
+            "examples": ["rgb_video", "depth", "imu", "pose", "audio"]
+          },
+          "clock": {
+            "type": "string",
+            "enum": [
+              "utc_epoch_ns",
+              "host_monotonic_ns",
+              "ar_frame_timestamp_ns",
+              "sensor_batch_ns",
+              "unknown"
+            ]
+          },
+          "offset_to_utc_ns": {
+            "type": "string",
+            "pattern": "^-?[0-9]{1,20}$",
+            "description": "Signed integer string: stream_time_ns + offset_to_utc_ns == utc_epoch_ns (when both are in linear domains)."
+          },
+          "samples": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["t_stream_ns"],
+              "properties": {
+                "t_stream_ns": { "$ref": "common.schema.json#/$defs/timestamp_ns" },
+                "t_utc_ns": { "$ref": "common.schema.json#/$defs/timestamp_ns" },
+                "frame_index": { "type": "integer", "minimum": 0 }
+              }
+            },
+            "description": "Calibration samples mapping stream clock to UTC where available."
+          }
+        }
+      }
+    }
+  }
+}

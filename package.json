@@ -1,0 +1,28 @@
+{
+  "name": "@mentraos/shared-schemas",
+  "version": "1.0.0",
+  "description": "Canonical JSON Schemas and multi-language models for Capture Bundle v1 (Global Refinement Layer)",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mentraos/shared-schemas.git"
+  },
+  "scripts": {
+    "test": "npm run prepare:ts-schemas && npm run test --workspace=@mentraos/capture-bundle-schemas",
+    "prepare:ts-schemas": "node tools/prepare-ts-package.mjs",
+    "validate:schemas": "node tools/validate-schemas.mjs",
+    "validate:example": "npm run build --workspace=@mentraos/capture-bundle-schemas && node tools/validate-example-bundle.mjs",
+    "ci": "npm run prepare:ts-schemas && npm run validate:schemas && npm run build --workspace=@mentraos/capture-bundle-schemas && npm test"
+  },
+  "workspaces": [
+    "packages/typescript"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

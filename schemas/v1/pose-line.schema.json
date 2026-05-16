@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/pose-line.schema.json",
+  "title": "Single JSON line of pose.jsonl",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timestamp_ns",
+    "frame_id",
+    "position_m",
+    "orientation_xyzw"
+  ],
+  "properties": {
+    "timestamp_ns": { "$ref": "common.schema.json#/$defs/timestamp_ns" },
+    "frame_id": { "type": "integer", "minimum": 0 },
+    "tracking_state": {
+      "type": "string",
+      "enum": [
+        "not_available",
+        "limited",
+        "normal",
+        "unknown"
+      ]
+    },
+    "position_m": {
+      "$ref": "common.schema.json#/$defs/vec3",
+      "description": "Translation in meters in the root pose frame declared by manifest.root_pose_frame."
+    },
+    "orientation_xyzw": {
+      "$ref": "common.schema.json#/$defs/quat_xyzw",
+      "description": "Orientation of device/camera frame relative to root pose frame."
+    },
+    "linear_velocity_m_s": { "$ref": "common.schema.json#/$defs/vec3" },
+    "angular_velocity_rad_s": { "$ref": "common.schema.json#/$defs/vec3" }
+  }
+}
