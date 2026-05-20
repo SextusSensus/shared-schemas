@@ -1,0 +1,111 @@
+{
+  "manifest": {
+    "schema_version": "1.0.0",
+    "bundle_spec_version": "1.0.0",
+    "bundle_id": "66666666-6666-4666-8666-666666666666",
+    "created_at_utc": "2026-05-13T16:00:00.000Z",
+    "lifecycle": "failed",
+    "hash_algorithm": "sha256",
+    "root_pose_frame": "world_ar_session",
+    "files": {
+      "metadata.json": { "sha256": "abababababababababababababababababababababababababababababababab", "size_bytes": 2094 },
+      "sync.json": { "sha256": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc", "size_bytes": 812 },
+      "pose.jsonl": { "sha256": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "size_bytes": 1540 },
+      "imu.jsonl": { "sha256": "dededededededededededededededededededededededededededededededede", "size_bytes": 1620 },
+      "assets/logs/reconstruction-diagnostics.json": {
+        "sha256": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+        "size_bytes": 12244
+      }
+    }
+  },
+  "metadata": {
+    "schema_version": "1.1.0",
+    "bundle_id": "66666666-6666-4666-8666-666666666666",
+    "recorded_platform": "mixed",
+    "app": { "name": "mentra-capture-mixed", "version": "2.4.1" },
+    "sensors": {
+      "rgb": { "present": true, "codec": "hevc", "resolution": { "width_px": 1920, "height_px": 1080 }, "nominal_fps": 60, "clock_domain": "host_monotonic_ns" },
+      "depth": { "mode": "lidar_dense", "units": "meters" },
+      "imu": { "present": true, "accel_unit": "m_s2", "gyro_unit": "rad_s" }
+    },
+    "reconstruction": {
+      "status": "failed",
+      "algorithm": "posegraph_mvs",
+      "pipeline_version": "3.0.0",
+      "processing_duration_ms": 42110,
+      "tracking_quality": "lost",
+      "failure_reason": "tracking_loss",
+      "stats": { "sparse_points": 4200, "dense_points": 0, "keyframes": 92 },
+      "point_cloud_references": [],
+      "timestamps": { "start_ns": "1700004000000000000", "end_ns": "1700004000042110000" },
+      "device_pairing_info": {
+        "primary_device_id": "66666666-6666-4666-8666-666666666666",
+        "companion_device_ids": ["77777777-7777-4777-8777-777777777777"],
+        "sync_quality": "degraded"
+      }
+    },
+    "labeling": {
+      "semantic_labels": ["table", "wall"],
+      "object_annotations": [
+        {
+          "object_id": "table-001",
+          "label": "table",
+          "tracking_id": "obj-track-12",
+          "confidence": 0.51
+        }
+      ],
+      "tracking_ids": ["obj-track-12"],
+      "confidence_scores": [0.51],
+      "label_taxonomy_version": "1.0.0",
+      "annotator_source": "model",
+      "review_status": "in_review"
+    },
+    "timeline": {
+      "recording_start_utc": "2026-05-13T16:00:00.000Z",
+      "recording_end_utc": "2026-05-13T16:00:35.000Z"
+    }
+  },
+  "sync": {
+    "schema_version": "1.0.0",
+    "bundle_id": "66666666-6666-4666-8666-666666666666",
+    "utc_epoch_anchor": { "valid": true, "anchor_utc": "2026-05-13T16:00:00.000Z", "anchor_monotonic_ns": "1700004000000000000" },
+    "streams": [
+      {
+        "stream_id": "pose",
+        "clock": "ar_frame_timestamp_ns",
+        "samples": [{ "t_stream_ns": "1700004000000000000", "t_utc_ns": "1700004000000000000", "frame_index": 0 }]
+      },
+      {
+        "stream_id": "imu",
+        "clock": "host_monotonic_ns",
+        "samples": [{ "t_stream_ns": "1700004000000000000", "t_utc_ns": "1700004000000000000" }]
+      }
+    ]
+  },
+  "pose": [
+    {
+      "timestamp_ns": "1700004000000000000",
+      "frame_id": 0,
+      "tracking_state": "limited",
+      "position_m": [0, 0, 0],
+      "orientation_xyzw": [0, 0, 0, 1]
+    }
+  ],
+  "imu": [
+    {
+      "timestamp_ns": "1700004000000000000",
+      "sequence": 0,
+      "gyro_rad_s": [0.3, 0.4, 0.8],
+      "accel_m_s2": [0.5, 0.3, 8.9]
+    }
+  ],
+  "diagnostics": {
+    "failure_reason_enum": "tracking_loss",
+    "corrupted_frames": [218, 219, 220, 221, 222],
+    "tracking_drop_windows_ms": [
+      { "start": 14100, "end": 16800 },
+      { "start": 27000, "end": 28500 }
+    ],
+    "logs_ref": "assets/logs/reconstruction-diagnostics.json"
+  }
+}

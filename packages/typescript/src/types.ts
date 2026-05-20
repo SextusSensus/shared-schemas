@@ -22,6 +22,8 @@ export interface ManifestFileEntry {
 
 export interface CaptureManifest {
   schema_version: string;
+  schema_family?: "capture_bundle";
+  extends_schema_version?: string;
   bundle_spec_version: string;
   bundle_id: string;
   capture_session_id?: string;
@@ -46,8 +48,192 @@ export interface MetadataDevice {
   os_version?: string;
 }
 
+export interface TimestampRange {
+  start_ns?: string;
+  end_ns?: string;
+}
+
+export interface SourceDeviceRef {
+  device_id?: string;
+  stream_id?: string;
+}
+
+export interface AudioMetadata {
+  codec?: string;
+  sample_rate_hz?: number;
+  channels?: number;
+  bit_depth?: number;
+  duration_ms?: number;
+  language?: string;
+  bitrate_bps?: number;
+  spatial_audio?: boolean;
+  noise_reduction?: boolean;
+  timestamps?: TimestampRange;
+  source_device?: SourceDeviceRef;
+  sync_offset_ms?: number;
+}
+
+export interface CameraIntrinsics {
+  fx: number;
+  fy: number;
+  cx: number;
+  cy: number;
+  skew?: number;
+}
+
+export interface VideoMetadata {
+  codec?: string;
+  width_px?: number;
+  height_px?: number;
+  fps?: number;
+  bitrate_bps?: number;
+  color_space?: string;
+  hdr?: boolean;
+  stabilization?: boolean;
+  rolling_shutter_correction?: boolean;
+  duration_ms?: number;
+  orientation?: "portrait" | "landscape_left" | "landscape_right" | "unknown";
+  camera_intrinsics?: CameraIntrinsics;
+  timestamps?: TimestampRange;
+  sync_offset_ms?: number;
+}
+
+export interface CalibrationMatrix3x3 {
+  values: [number, number, number, number, number, number, number, number, number];
+}
+
+export interface CalibrationExtrinsic {
+  translation_m: [number, number, number];
+  rotation_xyzw: [number, number, number, number];
+}
+
+export interface LensDistortion {
+  model: "brown_conrady" | "fisheye" | "none" | "unknown";
+  coefficients?: number[];
+}
+
+export interface DepthCalibration {
+  scale?: number;
+  bias_m?: number;
+  min_range_m?: number;
+  max_range_m?: number;
+}
+
+export interface ImuCalibration {
+  accel_bias?: [number, number, number];
+  gyro_bias?: [number, number, number];
+  accel_scale?: [number, number, number];
+  gyro_scale?: [number, number, number];
+}
+
+export interface CalibrationMetadata {
+  intrinsic?: CalibrationMatrix3x3;
+  extrinsic?: CalibrationExtrinsic;
+  lens_distortion?: LensDistortion;
+  depth_calibration?: DepthCalibration;
+  imu_calibration?: ImuCalibration;
+  timestamp_utc?: string;
+  calibration_version?: string;
+  calibration_source?: "factory" | "runtime" | "manual" | "unknown";
+  reprojection_error_px?: number;
+  confidence_score?: number;
+}
+
+export interface BoundingBox3d {
+  min: [number, number, number];
+  max: [number, number, number];
+}
+
+export interface LodLevel {
+  level: number;
+  face_count?: number;
+  vertex_count?: number;
+}
+
+export interface MeshMetadata {
+  mesh_format?: "obj" | "ply" | "glb" | "fbx" | "unknown";
+  vertex_count?: number;
+  face_count?: number;
+  normals?: boolean;
+  uv_channels?: number;
+  texture_references?: string[];
+  compression?: "none" | "draco" | "meshopt" | "unknown";
+  coordinate_system?: string;
+  scale?: number;
+  bounding_box?: BoundingBox3d;
+  generation_pipeline?: string;
+  lod_levels?: LodLevel[];
+}
+
+export type ReconstructionStatus = "not_started" | "in_progress" | "completed" | "failed" | "partial";
+
+export interface ReconstructionStats {
+  sparse_points?: number;
+  dense_points?: number;
+  keyframes?: number;
+}
+
+export interface DevicePairingInfo {
+  primary_device_id?: string;
+  companion_device_ids?: string[];
+  sync_quality?: "excellent" | "good" | "degraded" | "unknown";
+}
+
+export interface ReconstructionMetadata {
+  status?: ReconstructionStatus;
+  algorithm?: string;
+  pipeline_version?: string;
+  processing_duration_ms?: number;
+  tracking_quality?: "excellent" | "good" | "degraded" | "lost" | "unknown";
+  failure_reason?:
+    | "none"
+    | "tracking_loss"
+    | "insufficient_features"
+    | "sensor_desync"
+    | "corrupted_frames"
+    | "unknown";
+  stats?: ReconstructionStats;
+  point_cloud_references?: string[];
+  timestamps?: TimestampRange;
+  device_pairing_info?: DevicePairingInfo;
+}
+
+export interface ExportMetadata {
+  export_format: string;
+  export_version?: string;
+  compression_settings?: string;
+  export_timestamp_utc?: string;
+  source_bundle_id?: string;
+  export_target?: string;
+  conversion_pipeline?: string;
+  checksum_sha256?: string;
+  exported_assets?: string[];
+}
+
+export interface LabeledObjectAnnotation {
+  object_id: string;
+  label: string;
+  tracking_id?: string;
+  confidence?: number;
+  segmentation_ref?: string;
+}
+
+export interface LabelingMetadata {
+  semantic_labels?: string[];
+  object_annotations?: LabeledObjectAnnotation[];
+  tracking_ids?: string[];
+  confidence_scores?: number[];
+  segmentation_references?: string[];
+  label_taxonomy_version?: string;
+  annotator_source?: "human" | "model" | "hybrid" | "unknown";
+  timestamps?: TimestampRange;
+  review_status?: "not_reviewed" | "in_review" | "approved" | "rejected";
+}
+
 export interface CaptureMetadata {
   schema_version: string;
+  schema_family?: "capture_bundle";
+  extends_schema_version?: string;
   bundle_id: string;
   recorded_platform: RecordedPlatform;
   app: { name: string; version: string; build?: string };
@@ -89,6 +275,13 @@ export interface CaptureMetadata {
     recording_start_utc?: string;
     recording_end_utc?: string;
   };
+  audio?: AudioMetadata;
+  video?: VideoMetadata;
+  calibration?: CalibrationMetadata;
+  mesh?: MeshMetadata;
+  reconstruction?: ReconstructionMetadata;
+  exports?: ExportMetadata[];
+  labeling?: LabelingMetadata;
 }
 
 export interface SyncStreamSample {
@@ -111,6 +304,8 @@ export interface SyncStream {
 
 export interface CaptureSync {
   schema_version: string;
+  schema_family?: "capture_bundle";
+  extends_schema_version?: string;
   bundle_id: string;
   utc_epoch_anchor: {
     valid: boolean;

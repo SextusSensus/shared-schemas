@@ -18,6 +18,15 @@
       "$ref": "common.schema.json#/$defs/semver",
       "description": "Version of this manifest document shape (manifest.schema)."
     },
+    "schema_family": {
+      "type": "string",
+      "const": "capture_bundle",
+      "description": "Optional schema family marker to support versioned inheritance."
+    },
+    "extends_schema_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Optional parent schema version used by migration-aware consumers."
+    },
     "bundle_spec_version": {
       "$ref": "common.schema.json#/$defs/semver",
       "description": "Capture Bundle v1 semantic version (must match repository VERSION for official releases)."

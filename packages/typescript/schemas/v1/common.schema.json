@@ -58,6 +58,54 @@
         "failed"
       ],
       "description": "High-level lifecycle of the on-device bundle directory. See docs/BUNDLE_SPECIFICATION.md."
+    },
+    "timestamp_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "start_ns": { "$ref": "#/$defs/timestamp_ns" },
+        "end_ns": { "$ref": "#/$defs/timestamp_ns" }
+      }
+    },
+    "source_device_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "device_id": { "$ref": "#/$defs/uuid" },
+        "stream_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z0-9_\\-\\.]+$"
+        }
+      }
+    },
+    "vec3_number": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "quat_xyzw_number": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "matrix3x3_row_major": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "bbox3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "$ref": "#/$defs/vec3_number" },
+        "max": { "$ref": "#/$defs/vec3_number" }
+      }
     }
   }
 }

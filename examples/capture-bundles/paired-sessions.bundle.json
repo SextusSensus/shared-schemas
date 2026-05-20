@@ -1,0 +1,121 @@
+{
+  "manifest": {
+    "schema_version": "1.0.0",
+    "bundle_spec_version": "1.0.0",
+    "bundle_id": "33333333-3333-4333-8333-333333333333",
+    "capture_session_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "created_at_utc": "2026-05-13T14:00:00.000Z",
+    "lifecycle": "verified",
+    "hash_algorithm": "sha256",
+    "root_pose_frame": "world_posemesh_domain",
+    "files": {
+      "metadata.json": { "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "size_bytes": 2520 },
+      "sync.json": { "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "size_bytes": 1102 },
+      "pose.jsonl": { "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "size_bytes": 2288 },
+      "imu.jsonl": { "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "size_bytes": 2390 },
+      "assets/reconstruction/dense.ply": {
+        "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "size_bytes": 81220931
+      }
+    }
+  },
+  "metadata": {
+    "schema_version": "1.1.0",
+    "bundle_id": "33333333-3333-4333-8333-333333333333",
+    "recorded_platform": "mixed",
+    "app": { "name": "mentra-capture-mixed", "version": "2.4.1" },
+    "devices": [
+      {
+        "device_id": "33333333-3333-4333-8333-333333333333",
+        "role": "phone_primary",
+        "model": "iPhone15,4",
+        "os_version": "iOS 19.1"
+      },
+      {
+        "device_id": "44444444-4444-4444-8444-444444444444",
+        "role": "glasses_companion",
+        "model": "Mentra Glasses Gen3",
+        "os_version": "glassesOS 5.1"
+      }
+    ],
+    "coordinate_conventions": {
+      "phone_ar_sdk": "arkit",
+      "posemesh_domain_space": "right_handed_y_up",
+      "notes": "Phone and glasses transformed into shared posemesh domain."
+    },
+    "sensors": {
+      "rgb": { "present": true, "codec": "hevc", "resolution": { "width_px": 1920, "height_px": 1080 }, "nominal_fps": 60, "clock_domain": "host_monotonic_ns" },
+      "depth": { "mode": "lidar_dense", "units": "meters" },
+      "imu": { "present": true, "accel_unit": "m_s2", "gyro_unit": "rad_s" }
+    },
+    "reconstruction": {
+      "status": "completed",
+      "algorithm": "posegraph_mvs",
+      "pipeline_version": "3.0.0",
+      "processing_duration_ms": 76432,
+      "tracking_quality": "excellent",
+      "failure_reason": "none",
+      "stats": { "sparse_points": 142000, "dense_points": 4023100, "keyframes": 2200 },
+      "point_cloud_references": ["assets/reconstruction/dense.ply"],
+      "timestamps": { "start_ns": "1700002000000000000", "end_ns": "1700002000764320000" },
+      "device_pairing_info": {
+        "primary_device_id": "33333333-3333-4333-8333-333333333333",
+        "companion_device_ids": ["44444444-4444-4444-8444-444444444444"],
+        "sync_quality": "excellent"
+      }
+    },
+    "mesh": {
+      "mesh_format": "ply",
+      "vertex_count": 1265400,
+      "face_count": 2470000,
+      "normals": true,
+      "uv_channels": 2,
+      "texture_references": ["assets/reconstruction/albedo.ktx2", "assets/reconstruction/normal.ktx2"],
+      "compression": "meshopt",
+      "coordinate_system": "right_handed_y_up",
+      "scale": 1,
+      "bounding_box": { "min": [-5.4, -0.2, -4.1], "max": [6.8, 3.1, 4.7] },
+      "generation_pipeline": "posegraph-mvs-3.0",
+      "lod_levels": [{ "level": 0, "face_count": 2470000, "vertex_count": 1265400 }, { "level": 1, "face_count": 1240000, "vertex_count": 630000 }]
+    },
+    "timeline": {
+      "recording_start_utc": "2026-05-13T14:00:00.000Z",
+      "recording_end_utc": "2026-05-13T14:02:10.000Z"
+    }
+  },
+  "sync": {
+    "schema_version": "1.0.0",
+    "bundle_id": "33333333-3333-4333-8333-333333333333",
+    "utc_epoch_anchor": { "valid": true, "anchor_utc": "2026-05-13T14:00:00.000Z", "anchor_monotonic_ns": "1700002000000000000" },
+    "streams": [
+      {
+        "stream_id": "pose_phone",
+        "clock": "ar_frame_timestamp_ns",
+        "samples": [{ "t_stream_ns": "1700002000000000000", "t_utc_ns": "1700002000000000000", "frame_index": 0 }]
+      },
+      {
+        "stream_id": "pose_glasses",
+        "clock": "sensor_batch_ns",
+        "offset_to_utc_ns": "2000000",
+        "samples": [{ "t_stream_ns": "1700001999998000000", "t_utc_ns": "1700002000000000000", "frame_index": 0 }]
+      }
+    ]
+  },
+  "pose": [
+    {
+      "timestamp_ns": "1700002000000000000",
+      "frame_id": 0,
+      "tracking_state": "normal",
+      "position_m": [0, 0, 0],
+      "orientation_xyzw": [0, 0, 0, 1]
+    }
+  ],
+  "imu": [
+    {
+      "timestamp_ns": "1700002000000000000",
+      "sequence": 1,
+      "gyro_rad_s": [0, 0, 0],
+      "accel_m_s2": [0, 0, 9.8]
+    }
+  ]
+}

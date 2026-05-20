@@ -7,6 +7,15 @@
   "required": ["schema_version", "bundle_id", "utc_epoch_anchor"],
   "properties": {
     "schema_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "schema_family": {
+      "type": "string",
+      "const": "capture_bundle",
+      "description": "Optional schema family marker to support versioned inheritance."
+    },
+    "extends_schema_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Optional parent schema version used by migration-aware consumers."
+    },
     "bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
     "utc_epoch_anchor": {
       "type": "object",
