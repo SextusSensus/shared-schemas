@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/imu-line.schema.json",
+  "title": "Single JSON line of imu.jsonl",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["timestamp_ns", "gyro_rad_s", "accel_m_s2"],
+  "properties": {
+    "timestamp_ns": {
+      "$ref": "common.schema.json#/$defs/timestamp_ns",
+      "description": "Sample time in the IMU clock domain; map to UTC via sync.json."
+    },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "gyro_rad_s": {
+      "$ref": "common.schema.json#/$defs/vec3",
+      "description": "Angular velocity (rad/s) in sensor frame; align with metadata.sensors.imu if units differ."
+    },
+    "accel_m_s2": {
+      "$ref": "common.schema.json#/$defs/vec3",
+      "description": "Linear acceleration including gravity (m/s²) unless device documents otherwise."
+    },
+    "mag_uT": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Optional magnetometer (microtesla) in sensor frame."
+    }
+  }
+}

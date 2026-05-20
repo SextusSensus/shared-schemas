@@ -1,0 +1,221 @@
+{
+  "manifest": {
+    "schema_version": "1.0.0",
+    "bundle_spec_version": "1.0.0",
+    "bundle_id": "11111111-1111-4111-8111-111111111111",
+    "created_at_utc": "2026-05-13T12:00:00.000Z",
+    "lifecycle": "sealed",
+    "hash_algorithm": "sha256",
+    "root_pose_frame": "world_ar_session",
+    "files": {
+      "metadata.json": {
+        "sha256": "13f3f9b682e2edeca91e4f8e4be01d75df73987b4ee3ad31e0056ece66e2500a",
+        "size_bytes": 2048,
+        "media_type": "application/json"
+      },
+      "sync.json": {
+        "sha256": "f39c4f73d9ccf4e56d492f6a9fd9837a34f34b2f97e420f0a65f9209cc0bb6d9",
+        "size_bytes": 854,
+        "media_type": "application/json"
+      },
+      "pose.jsonl": {
+        "sha256": "af0f717d5b93f2f95f9d6a884af89858bc4e366f5ecea4f10d6cb96a94ca6fe9",
+        "size_bytes": 1422,
+        "media_type": "application/x-jsonlines"
+      },
+      "imu.jsonl": {
+        "sha256": "61ac3518f57cc63af0496ffc143aaebf36dcf37ff449f9f3464f4c6f95af26df",
+        "size_bytes": 1742,
+        "media_type": "application/x-jsonlines"
+      },
+      "assets/rgb.hevc": {
+        "sha256": "5715f4f4ef673e089f4cd6f1be5a09f7ac77eb8aad4f4bb5daebf2a31f4b71d8",
+        "size_bytes": 68423104,
+        "media_type": "video/hevc"
+      },
+      "assets/audio.aac": {
+        "sha256": "7ef515f6f9a26f8eb9ea20d1768db2aa8ca5fe32437d6f429f499eb8d006c95b",
+        "size_bytes": 3201124,
+        "media_type": "audio/aac"
+      }
+    }
+  },
+  "metadata": {
+    "schema_version": "1.1.0",
+    "bundle_id": "11111111-1111-4111-8111-111111111111",
+    "recorded_platform": "ios",
+    "app": {
+      "name": "mentra-capture-ios",
+      "version": "2.3.0",
+      "build": "23011"
+    },
+    "devices": [
+      {
+        "device_id": "11111111-1111-4111-8111-111111111111",
+        "role": "phone_primary",
+        "model": "iPhone15,3",
+        "os_version": "iOS 19.1"
+      }
+    ],
+    "coordinate_conventions": {
+      "phone_ar_sdk": "arkit",
+      "posemesh_domain_space": "right_handed_y_up",
+      "notes": "ARKit world frame with Y-up, meters."
+    },
+    "sensors": {
+      "rgb": {
+        "present": true,
+        "codec": "hevc",
+        "resolution": {
+          "width_px": 1920,
+          "height_px": 1440
+        },
+        "nominal_fps": 60,
+        "clock_domain": "host_monotonic_ns"
+      },
+      "depth": {
+        "mode": "lidar_dense",
+        "units": "meters"
+      },
+      "imu": {
+        "present": true,
+        "accel_unit": "m_s2",
+        "gyro_unit": "rad_s"
+      }
+    },
+    "audio": {
+      "codec": "aac",
+      "sample_rate_hz": 48000,
+      "channels": 2,
+      "bit_depth": 24,
+      "duration_ms": 12003,
+      "language": "en-US",
+      "bitrate_bps": 256000,
+      "spatial_audio": true,
+      "noise_reduction": true,
+      "timestamps": {
+        "start_ns": "1700000000000000000",
+        "end_ns": "1700000000120030000"
+      },
+      "source_device": {
+        "device_id": "11111111-1111-4111-8111-111111111111",
+        "stream_id": "audio"
+      },
+      "sync_offset_ms": -9.8
+    },
+    "video": {
+      "codec": "h265",
+      "width_px": 1920,
+      "height_px": 1440,
+      "fps": 60,
+      "bitrate_bps": 18000000,
+      "color_space": "bt2020",
+      "hdr": true,
+      "stabilization": true,
+      "rolling_shutter_correction": true,
+      "duration_ms": 12003,
+      "orientation": "portrait",
+      "camera_intrinsics": {
+        "fx": 1431.2,
+        "fy": 1429.6,
+        "cx": 960,
+        "cy": 720
+      },
+      "timestamps": {
+        "start_ns": "1700000000000000000",
+        "end_ns": "1700000000120030000"
+      },
+      "sync_offset_ms": 2.1
+    },
+    "calibration": {
+      "intrinsic": {
+        "values": [1431.2, 0, 960, 0, 1429.6, 720, 0, 0, 1]
+      },
+      "extrinsic": {
+        "translation_m": [0.01, 0.0, -0.02],
+        "rotation_xyzw": [0, 0, 0, 1]
+      },
+      "lens_distortion": {
+        "model": "brown_conrady",
+        "coefficients": [0.038, -0.012, 0.001, 0, 0]
+      },
+      "depth_calibration": {
+        "scale": 1,
+        "bias_m": 0,
+        "min_range_m": 0.2,
+        "max_range_m": 5
+      },
+      "imu_calibration": {
+        "accel_bias": [0.01, -0.01, 0.02],
+        "gyro_bias": [0.001, -0.001, 0.001],
+        "accel_scale": [1, 1, 1],
+        "gyro_scale": [1, 1, 1]
+      },
+      "timestamp_utc": "2026-05-13T11:59:58.100Z",
+      "calibration_version": "1.0.0",
+      "calibration_source": "runtime",
+      "reprojection_error_px": 0.39,
+      "confidence_score": 0.95
+    },
+    "timeline": {
+      "recording_start_utc": "2026-05-13T12:00:00.000Z",
+      "recording_end_utc": "2026-05-13T12:00:12.003Z"
+    }
+  },
+  "sync": {
+    "schema_version": "1.0.0",
+    "bundle_id": "11111111-1111-4111-8111-111111111111",
+    "utc_epoch_anchor": {
+      "valid": true,
+      "anchor_utc": "2026-05-13T12:00:00.000Z",
+      "anchor_monotonic_ns": "1700000000000000000"
+    },
+    "streams": [
+      {
+        "stream_id": "pose",
+        "clock": "ar_frame_timestamp_ns",
+        "samples": [
+          { "t_stream_ns": "1700000000000000000", "t_utc_ns": "1700000000000000000", "frame_index": 0 },
+          { "t_stream_ns": "1700000000033000000", "t_utc_ns": "1700000000033000000", "frame_index": 198 }
+        ]
+      },
+      {
+        "stream_id": "imu",
+        "clock": "host_monotonic_ns",
+        "samples": [
+          { "t_stream_ns": "1700000000000000000", "t_utc_ns": "1700000000000000000" }
+        ]
+      }
+    ]
+  },
+  "pose": [
+    {
+      "timestamp_ns": "1700000000000000000",
+      "frame_id": 0,
+      "tracking_state": "normal",
+      "position_m": [0, 0, 0],
+      "orientation_xyzw": [0, 0, 0, 1]
+    },
+    {
+      "timestamp_ns": "1700000000005000000",
+      "frame_id": 1,
+      "tracking_state": "normal",
+      "position_m": [0.02, 0, -0.01],
+      "orientation_xyzw": [0, 0.001, 0, 0.9999995]
+    }
+  ],
+  "imu": [
+    {
+      "timestamp_ns": "1700000000000000000",
+      "sequence": 100,
+      "gyro_rad_s": [0, 0, 0],
+      "accel_m_s2": [0.1, 0, 9.8]
+    },
+    {
+      "timestamp_ns": "1700000000000100000",
+      "sequence": 101,
+      "gyro_rad_s": [0, 0.01, 0],
+      "accel_m_s2": [0.1, 0.02, 9.79]
+    }
+  ]
+}

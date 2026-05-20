@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.egg-info/
+.eggs/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+.vscode/
+*.log
+.DS_Store
+coverage/
+.kotlin/
+target/

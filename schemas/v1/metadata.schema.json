@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/metadata.schema.json",
+  "title": "Capture Bundle metadata.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "recorded_platform",
+    "app",
+    "sensors"
+  ],
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/semver" },
+    "schema_family": {
+      "type": "string",
+      "const": "capture_bundle",
+      "description": "Optional schema family marker to support versioned inheritance."
+    },
+    "extends_schema_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Optional parent schema version used by migration-aware consumers."
+    },
+    "bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
+    "recorded_platform": {
+      "type": "string",
+      "enum": ["ios", "android", "glasses", "mixed"],
+      "description": "Primary recorder platform; mixed when phone + glasses contribute."
+    },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "version": { "$ref": "common.schema.json#/$defs/semver" },
+        "build": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["device_id", "role"],
+        "properties": {
+          "device_id": { "$ref": "common.schema.json#/$defs/uuid" },
+          "role": {
+            "type": "string",
+            "enum": [
+              "phone_primary",
+              "glasses_companion",
+              "unknown"
+            ]
+          },
+          "model": { "type": "string", "maxLength": 256 },
+          "os_version": { "type": "string", "maxLength": 128 }
+        }
+      }
+    },
+    "coordinate_conventions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "phone_ar_sdk": {
+          "type": "string",
+          "enum": ["arkit", "arcore", "none"]
+        },
+        "posemesh_domain_space": {
+          "type": "string",
+          "enum": ["right_handed_y_up", "unspecified"],
+          "description": "Posemesh-published poses are right-handed Y-up in domain space unless custom tooling documents otherwise."
+        },
+        "notes": { "type": "string", "maxLength": 8192 }
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rgb", "depth", "imu"],
+      "properties": {
+        "rgb": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "codec": { "type": "string", "maxLength": 64 },
+            "resolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["width_px", "height_px"],
+              "properties": {
+                "width_px": { "type": "integer", "minimum": 1 },
+                "height_px": { "type": "integer", "minimum": 1 }
+              }
+            },
+            "nominal_fps": { "type": "number", "exclusiveMinimum": 0 },
+            "clock_domain": {
+              "type": "string",
+              "enum": ["host_monotonic_ns", "sensor_unknown"],
+              "description": "Clock used for frame timestamps before sync.json mapping."
+            }
+          }
+        },
+        "depth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "lidar_dense",
+                "stereo",
+                "tof",
+                "arcore_raw",
+                "none",
+                "unknown"
+              ]
+            },
+            "units": {
+              "type": "string",
+              "enum": ["meters", "millimeters", "normalized", "unknown"]
+            }
+          }
+        },
+        "imu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "accel_unit": {
+              "type": "string",
+              "enum": ["m_s2", "g", "unknown"]
+            },
+            "gyro_unit": {
+              "type": "string",
+              "enum": ["rad_s", "deg_s", "unknown"]
+            }
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codec": { "type": "string", "maxLength": 64 },
+        "sample_rate_hz": { "type": "integer", "minimum": 1 },
+        "channels": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "bit_depth": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "duration_ms": { "type": "number", "minimum": 0 },
+        "language": { "type": "string", "maxLength": 32 },
+        "bitrate_bps": { "type": "integer", "minimum": 1 },
+        "spatial_audio": { "type": "boolean" },
+        "noise_reduction": { "type": "boolean" },
+        "timestamps": { "$ref": "common.schema.json#/$defs/timestamp_range" },
+        "source_device": { "$ref": "common.schema.json#/$defs/source_device_ref" },
+        "sync_offset_ms": { "type": "number" }
+      }
+    },
+    "video": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codec": { "type": "string", "maxLength": 64 },
+        "width_px": { "type": "integer", "minimum": 1 },
+        "height_px": { "type": "integer", "minimum": 1 },
+        "fps": { "type": "number", "exclusiveMinimum": 0 },
+        "bitrate_bps": { "type": "integer", "minimum": 1 },
+        "color_space": { "type": "string", "maxLength": 64 },
+        "hdr": { "type": "boolean" },
+        "stabilization": { "type": "boolean" },
+        "rolling_shutter_correction": { "type": "boolean" },
+        "duration_ms": { "type": "number", "minimum": 0 },
+        "orientation": {
+          "type": "string",
+          "enum": ["portrait", "landscape_left", "landscape_right", "unknown"]
+        },
+        "camera_intrinsics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fx", "fy", "cx", "cy"],
+          "properties": {
+            "fx": { "type": "number" },
+            "fy": { "type": "number" },
+            "cx": { "type": "number" },
+            "cy": { "type": "number" },
+            "skew": { "type": "number" }
+          }
+        },
+        "timestamps": { "$ref": "common.schema.json#/$defs/timestamp_range" },
+        "sync_offset_ms": { "type": "number" }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intrinsic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["values"],
+          "properties": {
+            "values": { "$ref": "common.schema.json#/$defs/matrix3x3_row_major" }
+          }
+        },
+        "extrinsic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["translation_m", "rotation_xyzw"],
+          "properties": {
+            "translation_m": { "$ref": "common.schema.json#/$defs/vec3_number" },
+            "rotation_xyzw": { "$ref": "common.schema.json#/$defs/quat_xyzw_number" }
+          }
+        },
+        "lens_distortion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model"],
+          "properties": {
+            "model": {
+              "type": "string",
+              "enum": ["brown_conrady", "fisheye", "none", "unknown"]
+            },
+            "coefficients": {
+              "type": "array",
+              "items": { "type": "number" }
+            }
+          }
+        },
+        "depth_calibration": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": { "type": "number" },
+            "bias_m": { "type": "number" },
+            "min_range_m": { "type": "number", "minimum": 0 },
+            "max_range_m": { "type": "number", "minimum": 0 }
+          }
+        },
+        "imu_calibration": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "accel_bias": { "$ref": "common.schema.json#/$defs/vec3_number" },
+            "gyro_bias": { "$ref": "common.schema.json#/$defs/vec3_number" },
+            "accel_scale": { "$ref": "common.schema.json#/$defs/vec3_number" },
+            "gyro_scale": { "$ref": "common.schema.json#/$defs/vec3_number" }
+          }
+        },
+        "timestamp_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+        "calibration_version": { "$ref": "common.schema.json#/$defs/semver" },
+        "calibration_source": {
+          "type": "string",
+          "enum": ["factory", "runtime", "manual", "unknown"]
+        },
+        "reprojection_error_px": { "type": "number", "minimum": 0 },
+        "confidence_score": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "mesh": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mesh_format": {
+          "type": "string",
+          "enum": ["obj", "ply", "glb", "fbx", "unknown"]
+        },
+        "vertex_count": { "type": "integer", "minimum": 0 },
+        "face_count": { "type": "integer", "minimum": 0 },
+        "normals": { "type": "boolean" },
+        "uv_channels": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "texture_references": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 2048 }
+        },
+        "compression": {
+          "type": "string",
+          "enum": ["none", "draco", "meshopt", "unknown"]
+        },
+        "coordinate_system": { "type": "string", "maxLength": 128 },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "bounding_box": { "$ref": "common.schema.json#/$defs/bbox3" },
+        "generation_pipeline": { "type": "string", "maxLength": 256 },
+        "lod_levels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["level"],
+            "properties": {
+              "level": { "type": "integer", "minimum": 0 },
+              "face_count": { "type": "integer", "minimum": 0 },
+              "vertex_count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_started", "in_progress", "completed", "failed", "partial"]
+        },
+        "algorithm": { "type": "string", "maxLength": 128 },
+        "pipeline_version": { "$ref": "common.schema.json#/$defs/semver" },
+        "processing_duration_ms": { "type": "number", "minimum": 0 },
+        "tracking_quality": {
+          "type": "string",
+          "enum": ["excellent", "good", "degraded", "lost", "unknown"]
+        },
+        "failure_reason": {
+          "type": "string",
+          "enum": [
+            "none",
+            "tracking_loss",
+            "insufficient_features",
+            "sensor_desync",
+            "corrupted_frames",
+            "unknown"
+          ]
+        },
+        "stats": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sparse_points": { "type": "integer", "minimum": 0 },
+            "dense_points": { "type": "integer", "minimum": 0 },
+            "keyframes": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "point_cloud_references": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 2048 }
+        },
+        "timestamps": { "$ref": "common.schema.json#/$defs/timestamp_range" },
+        "device_pairing_info": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "primary_device_id": { "$ref": "common.schema.json#/$defs/uuid" },
+            "companion_device_ids": {
+              "type": "array",
+              "items": { "$ref": "common.schema.json#/$defs/uuid" }
+            },
+            "sync_quality": {
+              "type": "string",
+              "enum": ["excellent", "good", "degraded", "unknown"]
+            }
+          }
+        }
+      }
+    },
+    "exports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["export_format"],
+        "properties": {
+          "export_format": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "export_version": { "$ref": "common.schema.json#/$defs/semver" },
+          "compression_settings": { "type": "string", "maxLength": 256 },
+          "export_timestamp_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+          "source_bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
+          "export_target": { "type": "string", "maxLength": 256 },
+          "conversion_pipeline": { "type": "string", "maxLength": 256 },
+          "checksum_sha256": { "$ref": "common.schema.json#/$defs/sha256_hex" },
+          "exported_assets": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1, "maxLength": 2048 }
+          }
+        }
+      }
+    },
+    "labeling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "semantic_labels": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "object_annotations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["object_id", "label"],
+            "properties": {
+              "object_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "label": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "tracking_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+              "segmentation_ref": { "type": "string", "minLength": 1, "maxLength": 2048 }
+            }
+          }
+        },
+        "tracking_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+        },
+        "confidence_scores": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "segmentation_references": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 2048 }
+        },
+        "label_taxonomy_version": { "$ref": "common.schema.json#/$defs/semver" },
+        "annotator_source": {
+          "type": "string",
+          "enum": ["human", "model", "hybrid", "unknown"]
+        },
+        "timestamps": { "$ref": "common.schema.json#/$defs/timestamp_range" },
+        "review_status": {
+          "type": "string",
+          "enum": ["not_reviewed", "in_review", "approved", "rejected"]
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recording_start_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+        "recording_end_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" }
+      }
+    }
+  }
+}

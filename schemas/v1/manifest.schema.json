@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.mentraos.global/capture-bundle/v1/manifest.schema.json",
+  "title": "Capture Bundle manifest.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_spec_version",
+    "bundle_id",
+    "created_at_utc",
+    "lifecycle",
+    "hash_algorithm",
+    "files"
+  ],
+  "properties": {
+    "schema_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Version of this manifest document shape (manifest.schema)."
+    },
+    "schema_family": {
+      "type": "string",
+      "const": "capture_bundle",
+      "description": "Optional schema family marker to support versioned inheritance."
+    },
+    "extends_schema_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Optional parent schema version used by migration-aware consumers."
+    },
+    "bundle_spec_version": {
+      "$ref": "common.schema.json#/$defs/semver",
+      "description": "Capture Bundle v1 semantic version (must match repository VERSION for official releases)."
+    },
+    "bundle_id": { "$ref": "common.schema.json#/$defs/uuid" },
+    "capture_session_id": {
+      "$ref": "common.schema.json#/$defs/uuid",
+      "description": "Optional logical session identifier shared across companion devices."
+    },
+    "created_at_utc": { "$ref": "common.schema.json#/$defs/rfc3339_utc_z" },
+    "lifecycle": { "$ref": "common.schema.json#/$defs/bundle_lifecycle" },
+    "hash_algorithm": {
+      "type": "string",
+      "const": "sha256",
+      "description": "Digest algorithm for file entries. Only sha256 is defined for v1."
+    },
+    "root_pose_frame": {
+      "type": "string",
+      "enum": ["world_ar_session", "world_posemesh_domain", "device_imu", "custom"],
+      "description": "Declares which convention applies to pose.jsonl (excluding custom)."
+    },
+    "root_pose_frame_note": {
+      "type": "string",
+      "maxLength": 4096,
+      "description": "Required when root_pose_frame is custom."
+    },
+    "files": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^(?!manifest\\.json$).+$",
+        "description": "POSIX-style relative path from bundle root; must not be manifest.json."
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sha256", "size_bytes"],
+        "properties": {
+          "sha256": { "$ref": "common.schema.json#/$defs/sha256_hex" },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Byte length of the file on disk (raw bytes)."
+          },
+          "media_type": {
+            "type": "string",
+            "maxLength": 256,
+            "description": "Optional MIME type hint for tooling."
+          }
+        }
+      },
+      "description": "Relative POSIX paths from bundle root to file descriptors. manifest.json MUST NOT be self-listed; its integrity is verified out-of-band or via wrapper manifest where applicable."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "root_pose_frame": { "const": "custom" } },
+        "required": ["root_pose_frame"]
+      },
+      "then": {
+        "required": ["root_pose_frame_note"],
+        "properties": {
+          "root_pose_frame_note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        }
+      }
+    }
+  ]
+}

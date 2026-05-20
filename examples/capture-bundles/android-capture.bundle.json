@@ -1,0 +1,115 @@
+{
+  "manifest": {
+    "schema_version": "1.0.0",
+    "bundle_spec_version": "1.0.0",
+    "bundle_id": "22222222-2222-4222-8222-222222222222",
+    "created_at_utc": "2026-05-13T13:00:00.000Z",
+    "lifecycle": "sealed",
+    "hash_algorithm": "sha256",
+    "root_pose_frame": "world_ar_session",
+    "files": {
+      "metadata.json": { "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "size_bytes": 1890, "media_type": "application/json" },
+      "sync.json": { "sha256": "2222222222222222222222222222222222222222222222222222222222222222", "size_bytes": 744, "media_type": "application/json" },
+      "pose.jsonl": { "sha256": "3333333333333333333333333333333333333333333333333333333333333333", "size_bytes": 1270, "media_type": "application/x-jsonlines" },
+      "imu.jsonl": { "sha256": "4444444444444444444444444444444444444444444444444444444444444444", "size_bytes": 1302, "media_type": "application/x-jsonlines" }
+    }
+  },
+  "metadata": {
+    "schema_version": "1.1.0",
+    "bundle_id": "22222222-2222-4222-8222-222222222222",
+    "recorded_platform": "android",
+    "app": { "name": "mentra-capture-android", "version": "2.3.0", "build": "4102" },
+    "devices": [
+      {
+        "device_id": "22222222-2222-4222-8222-222222222222",
+        "role": "phone_primary",
+        "model": "Pixel 10 Pro",
+        "os_version": "Android 17"
+      }
+    ],
+    "coordinate_conventions": {
+      "phone_ar_sdk": "arcore",
+      "posemesh_domain_space": "right_handed_y_up",
+      "notes": "ARCore world frame with runtime relocalization."
+    },
+    "sensors": {
+      "rgb": {
+        "present": true,
+        "codec": "h264",
+        "resolution": { "width_px": 1920, "height_px": 1080 },
+        "nominal_fps": 30,
+        "clock_domain": "host_monotonic_ns"
+      },
+      "depth": { "mode": "arcore_raw", "units": "meters" },
+      "imu": { "present": true, "accel_unit": "m_s2", "gyro_unit": "rad_s" }
+    },
+    "video": {
+      "codec": "h264",
+      "width_px": 1920,
+      "height_px": 1080,
+      "fps": 30,
+      "bitrate_bps": 8000000,
+      "color_space": "bt709",
+      "hdr": false,
+      "stabilization": true,
+      "rolling_shutter_correction": false,
+      "duration_ms": 30015,
+      "orientation": "landscape_left",
+      "camera_intrinsics": { "fx": 1280.4, "fy": 1278.9, "cx": 960, "cy": 540 },
+      "timestamps": { "start_ns": "1700001000000000000", "end_ns": "1700001000300150000" },
+      "sync_offset_ms": 0.8
+    },
+    "calibration": {
+      "intrinsic": { "values": [1280.4, 0, 960, 0, 1278.9, 540, 0, 0, 1] },
+      "lens_distortion": { "model": "fisheye", "coefficients": [0.02, -0.01, 0.001, 0, 0] },
+      "timestamp_utc": "2026-05-13T12:59:57.000Z",
+      "calibration_version": "1.0.0",
+      "calibration_source": "factory",
+      "reprojection_error_px": 0.57,
+      "confidence_score": 0.88
+    },
+    "timeline": {
+      "recording_start_utc": "2026-05-13T13:00:00.000Z",
+      "recording_end_utc": "2026-05-13T13:00:30.015Z"
+    }
+  },
+  "sync": {
+    "schema_version": "1.0.0",
+    "bundle_id": "22222222-2222-4222-8222-222222222222",
+    "utc_epoch_anchor": {
+      "valid": true,
+      "anchor_utc": "2026-05-13T13:00:00.000Z",
+      "anchor_monotonic_ns": "1700001000000000000"
+    },
+    "streams": [
+      {
+        "stream_id": "pose",
+        "clock": "ar_frame_timestamp_ns",
+        "samples": [{ "t_stream_ns": "1700001000000000000", "t_utc_ns": "1700001000000000000", "frame_index": 0 }]
+      },
+      {
+        "stream_id": "depth",
+        "clock": "host_monotonic_ns",
+        "offset_to_utc_ns": "0",
+        "samples": [{ "t_stream_ns": "1700001000000000000", "t_utc_ns": "1700001000000000000", "frame_index": 0 }]
+      }
+    ]
+  },
+  "pose": [
+    {
+      "timestamp_ns": "1700001000000000000",
+      "frame_id": 0,
+      "tracking_state": "normal",
+      "position_m": [0, 0, 0],
+      "orientation_xyzw": [0, 0, 0, 1]
+    }
+  ],
+  "imu": [
+    {
+      "timestamp_ns": "1700001000000000000",
+      "sequence": 0,
+      "gyro_rad_s": [0, 0, 0],
+      "accel_m_s2": [0, 0, 9.8]
+    }
+  ]
+}
